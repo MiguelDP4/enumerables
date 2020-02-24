@@ -78,6 +78,20 @@ module Enumerable
     end
     counter
   end
+
+  def multiply_els
+    counter = 1
+    if block_given?
+      for value in self do
+        counter *= value if yield(value)
+      end
+    else
+      for value in self do
+        counter *= value
+      end
+    end
+    counter
+  end
 end
 
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
@@ -122,3 +136,9 @@ puts testing_array.my_inject
 
 puts 'Testing my_inject by summing all the even elements'
 puts testing_array.my_inject(&:even?)
+
+puts 'Testing multiply_els without any block'
+puts testing_array.multiply_els
+
+puts 'Testing multiply_els by multiplying only the even numbers'
+puts testing_array.multiply_els(&:even?)
