@@ -44,6 +44,19 @@ module Enumerable
   end
     !flag
   end
+
+  def my_count
+    i = 0
+    if block_given?
+      for value in self do
+        i += 1 if yield(value)
+      end
+    else
+      i = length
+    end
+    i
+  end
+
 end
 
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
@@ -71,3 +84,9 @@ puts testing_array.my_any?(&bigger_than_thirty)
 
 puts 'Testing my_none by checking if none of the numbers are greater than 30'
 puts testing_array.my_none?(&bigger_than_thirty)
+
+puts 'Testing my_count without any block'
+puts testing_array.my_count
+
+puts 'Testing my_count by counting all the even numbers'
+puts testing_array.my_count(&:even?)
