@@ -57,6 +57,13 @@ module Enumerable
     i
   end
 
+  def my_map
+    new_array = []
+    for value in self do
+      new_array.push(yield(value))
+    end
+    new_array
+  end
 end
 
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
@@ -90,3 +97,8 @@ puts testing_array.my_count
 
 puts 'Testing my_count by counting all the even numbers'
 puts testing_array.my_count(&:even?)
+
+puts 'Testing my_map by printing a new array which multiplies every element by 3'
+extra_array = testing_array.my_map { |value| value * 3 }
+print extra_array
+puts ''
