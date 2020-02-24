@@ -142,3 +142,9 @@ puts testing_array.multiply_els
 
 puts 'Testing multiply_els by multiplying only the even numbers'
 puts testing_array.multiply_els(&:even?)
+
+double = proc { |value| value * 2 }
+
+puts 'Testing my_map with a proc the proc doubles the value'
+extra_array = testing_array.my_map(&double)
+print extra_array
