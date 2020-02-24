@@ -8,7 +8,7 @@ The purpose of this project is to introduce ourselves to the ruby programming la
 
 ## Live Demo
 
-Download the .rb file and run it from the terminal
+Download the .rb file and run it from the terminal using the command "ruby enumerables.rb"
 
 
 ## Authors
@@ -28,4 +28,4 @@ Give a ⭐️ if you like this project!
 
 ## Acknowledgments
 
-- We thank microverse for this learning opportunity.
+- I thank microverse for this learning opportunity.
