@@ -22,6 +22,7 @@ module Enumerable
   end
 
   def my_all?
+    flag = true
     each do |value|
       flag = yield(value)
       break unless flag
@@ -30,6 +31,7 @@ module Enumerable
   end
 
   def my_any?
+    flag = false
     each do |value|
       flag = yield(value)
       break if flag
@@ -38,6 +40,7 @@ module Enumerable
   end
 
   def my_none?
+    flag = false
     each do |value|
       flag = yield(value)
       break if flag
@@ -97,7 +100,7 @@ end
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
 print 'Test array: ', testing_array
 puts ''
-puts 'Testing my_each: '
+puts 'Testing my_each by multiplying each value by 2: '
 testing_array.my_each { |value| print value * 2, ' ' }
 puts ''
 
@@ -148,3 +151,4 @@ double = proc { |value| value * 2 }
 puts 'Testing my_map with a proc the proc doubles the value'
 extra_array = testing_array.my_map(&double)
 print extra_array
+puts ''
