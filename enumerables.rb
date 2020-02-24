@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module Enumerable
   def my_each
-    for value in self do
+    each do |value|
       yield(value)
     end
   end
 
   def my_each_with_index
     i = 0
-    for value in self do
+    each do |value|
       yield(value, i)
       i += 1
     end
@@ -15,14 +17,14 @@ module Enumerable
 
   def my_select
     new_array = []
-    for value in self do
+    each do |value|
       new_array.push(value) if yield(value)
     end
     new_array
   end
 
   def my_all?
-    for value in self do
+    each do |value|
       flag = yield(value)
       break unless flag
     end
@@ -30,7 +32,7 @@ module Enumerable
   end
 
   def my_any?
-    for value in self do
+    each do |value|
       flag = yield(value)
       break if flag
     end
@@ -38,17 +40,17 @@ module Enumerable
   end
 
   def my_none?
-    for value in self do
+    each do |value|
       flag = yield(value)
       break if flag
-  end
+    end
     !flag
   end
 
   def my_count
     i = 0
     if block_given?
-      for value in self do
+      each do |value|
         i += 1 if yield(value)
       end
     else
@@ -59,7 +61,7 @@ module Enumerable
 
   def my_map
     new_array = []
-    for value in self do
+    each do |value|
       new_array.push(yield(value))
     end
     new_array
@@ -68,11 +70,11 @@ module Enumerable
   def my_inject
     counter = 0
     if block_given?
-      for value in self do
+      each do |value|
         counter += value if yield(value)
       end
     else
-      for value in self do
+      each do |value|
         counter += value
       end
     end
@@ -82,11 +84,11 @@ module Enumerable
   def multiply_els
     counter = 1
     if block_given?
-      for value in self do
+      each do |value|
         counter *= value if yield(value)
       end
     else
-      for value in self do
+      each do |value|
         counter *= value
       end
     end
