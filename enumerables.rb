@@ -64,6 +64,20 @@ module Enumerable
     end
     new_array
   end
+
+  def my_inject
+    counter = 0
+    if block_given?
+      for value in self do
+        counter += value if yield(value)
+      end
+    else
+      for value in self do
+        counter += value
+      end
+    end
+    counter
+  end
 end
 
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
@@ -102,3 +116,9 @@ puts 'Testing my_map by printing a new array which multiplies every element by 3
 extra_array = testing_array.my_map { |value| value * 3 }
 print extra_array
 puts ''
+
+puts 'Testing my_inject by summing all the elements, not using any block'
+puts testing_array.my_inject
+
+puts 'Testing my_inject by summing all the even elements'
+puts testing_array.my_inject(&:even?)
