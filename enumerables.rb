@@ -20,6 +20,30 @@ module Enumerable
     end
     new_array
   end
+
+  def my_all?
+    for value in self do
+      flag = yield(value)
+      break unless flag
+    end
+    flag
+  end
+
+  def my_any?
+    for value in self do
+      flag = yield(value)
+      break if flag
+    end
+    flag
+  end
+
+  def my_none?
+    for value in self do
+      flag = yield(value)
+      break if flag
+  end
+    !flag
+  end
 end
 
 testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
@@ -36,3 +60,14 @@ puts ''
 puts 'Testing my_select by selecting odd numbers'
 testing_array.my_select { |value| print "#{value} " if value.even? }
 puts ''
+
+bigger_than_thirty = proc { |num| num > 30 }
+
+puts 'Testing my_all by checking if all numbers are greater than 30'
+puts testing_array.my_all?(&bigger_than_thirty)
+
+puts 'Testing my_any by checking if any value is greater than 30'
+puts testing_array.my_any?(&bigger_than_thirty)
+
+puts 'Testing my_none by checking if none of the numbers are greater than 30'
+puts testing_array.my_none?(&bigger_than_thirty)
