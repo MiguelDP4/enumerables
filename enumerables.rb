@@ -1,154 +1,279 @@
 module Enumerable
   def my_each
-    each do |value|
-      yield(value)
+    if block_given?
+      for value in self do
+        yield(value)
+      end
+    else
+      to_enum(:my_each)
     end
   end
 
   def my_each_with_index
-    i = 0
-    each do |value|
-      yield(value, i)
-      i += 1
+    if block_given?
+      i = 0
+      for value in self do
+        yield(value, i)
+        i += 1
+      end
+    else
+      to_enum(:my_each_with_index)
     end
   end
 
   def my_select
-    new_array = []
-    each do |value|
-      new_array.push(value) if yield(value)
-    end
-    new_array
-  end
-
-  def my_all?
-    flag = true
-    each do |value|
-      flag = yield(value)
-      break unless flag
-    end
-    flag
-  end
-
-  def my_any?
-    flag = false
-    each do |value|
-      flag = yield(value)
-      break if flag
-    end
-    flag
-  end
-
-  def my_none?
-    flag = false
-    each do |value|
-      flag = yield(value)
-      break if flag
-    end
-    !flag
-  end
-
-  def my_count
-    i = 0
     if block_given?
-      each do |value|
-        i += 1 if yield(value)
+      new_array = []
+      for value in self do
+        new_array.push(value) if yield(value)
+      end
+      new_array
+    else
+      to_enum(:my_select)
+    end
+  end
+
+  def my_all(argument = nil)
+    if argument.nil? && !block_given?
+      for value in self do
+        matches = value.nil? || !value == true
+        break if matches
+      end
+      !matches
+    elsif argument.nil?
+      for value in self do
+        matches = yield(value)
+        break unless matches
+      end
+      matches
+    elsif argument.is_a?(Regexp)
+      for value in self do
+        matches = value.to_s.match?(argument)
+        break unless matches
+      end
+      matches
+    elsif argument.is_a?(Class)
+      for value in self do
+        matches = value.is_a?(argument)
+        break unless matches
+      end
+      matches
+    else
+      for value in self do
+        matches = value == argument
+        break unless matches
+      end
+      matches
+    end
+  end
+
+  def my_any(argument = nil)
+    if argument.nil? && !block_given?
+      for value in self do
+        matches = value.nil? || !value == true
+        break unless matches
+      end
+      !matches
+    elsif argument.nil?
+      for value in self do
+        matches = yield(value)
+        break if matches
+      end
+      matches
+    elsif argument.is_a?(Regexp)
+      for value in self do
+        matches = value.to_s.match?(argument)
+        break if matches
+      end
+      matches
+    elsif argument.is_a?(Class)
+      for value in self do
+        matches = value.is_a?(argument)
+        break if matches
+      end
+      matches
+    else
+      for value in self do
+        matches = value == argument
+        break if matches
+      end
+      matches
+    end
+  end
+
+  def my_none(argument = nil)
+    if argument.nil? && !block_given?
+      for value in self do
+        matches = value == true
+        break if matches
+      end
+    elsif argument.nil?
+      for value in self do
+        matches = yield(value)
+        break if matches
+      end
+    elsif argument.is_a?(Regexp)
+      for value in self do
+        matches = value.to_s.match?(argument)
+        break if matches
+      end
+    elsif argument.is_a?(Class)
+      for value in self do
+        matches = value.is_a?(argument)
+        break if matches
       end
     else
-      i = length
+      for value in self do
+        matches = value == argument
+        break if matches
+      end
+    end
+    !matches
+  end
+
+  def my_count(argument = nil)
+    i = 0
+    if argument.nil?
+      if block_given?
+        for value in self do
+          i += 1 if yield(value)
+        end
+      else
+        i = length
+      end
+    else
+      for value in self do
+        i += 1 if value == argument
+      end
     end
     i
   end
 
   def my_map
-    new_array = []
-    each do |value|
-      new_array.push(yield(value))
+    if block_given?
+      new_array = []
+      for value in self do
+        new_array.push(yield(value))
+      end
+      new_array
+    else
+      to_enum(:my_map)
     end
-    new_array
   end
 
-  def my_inject
-    counter = 0
+  def my_inject(argument1 = nil, argument2 = nil)
     if block_given?
-      each do |value|
-        counter += value if yield(value)
+      if argument1.nil?
+        first = true
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator = yield(accumulator, value)
+        end
+      else
+        accumulator = argument1
+        for value in self do
+          accumulator = yield(accumulator, value)
+        end
+      end
+    elsif argument2.nil?
+      first = true
+      case argument1
+      when :+
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator += value
+        end
+      when :-
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator -= value
+        end
+      when :*
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator *= value
+        end
+      when :/
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator /= value
+        end
+      when :%
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator = accumulator % value
+        end
+      when :**
+        for value in self do
+          if first
+            accumulator = value
+            first = false
+            next
+          end
+          accumulator **= value
+        end
+      else
+        puts 'Please insert a valid symbol'
       end
     else
-      each do |value|
-        counter += value
+      accumulator = argument1
+      case argument2
+      when :+
+        for value in self do
+          accumulator += value
+        end
+      when :-
+        for value in self do
+          accumulator -= value
+        end
+      when :*
+        for value in self do
+          accumulator *= value
+        end
+      when :/
+        for value in self do
+          accumulator /= value
+        end
+      when :%
+        for value in self do
+          accumulator = accumulator % value
+        end
+      when :**
+        for value in self do
+          accumulator **= value
+        end
+      else
+        puts 'Please insert a valid symbol'
       end
     end
-    counter
-  end
-
-  def multiply_els
-    counter = 1
-    if block_given?
-      each do |value|
-        counter *= value if yield(value)
-      end
-    else
-      each do |value|
-        counter *= value
-      end
-    end
-    counter
+    accumulator
   end
 end
 
-testing_array = [11, 15, 18, 54, 23, 46, 96, 85, 42, 10, 36, 52]
-print 'Test array: ', testing_array
-puts ''
-puts 'Testing my_each by multiplying each value by 2: '
-testing_array.my_each { |value| print value * 2, ' ' }
-puts ''
-
-puts 'Testing my_each_with_index: '
-testing_array.my_each_with_index { |value, index| puts "Value: #{value}, Index: #{index}" }
-puts ''
-
-puts 'Testing my_select by selecting odd numbers'
-testing_array.my_select { |value| print "#{value} " if value.even? }
-puts ''
-
-bigger_than_thirty = proc { |num| num > 30 }
-
-puts 'Testing my_all by checking if all numbers are greater than 30'
-puts testing_array.my_all?(&bigger_than_thirty)
-
-puts 'Testing my_any by checking if any value is greater than 30'
-puts testing_array.my_any?(&bigger_than_thirty)
-
-puts 'Testing my_none by checking if none of the numbers are greater than 30'
-puts testing_array.my_none?(&bigger_than_thirty)
-
-puts 'Testing my_count without any block'
-puts testing_array.my_count
-
-puts 'Testing my_count by counting all the even numbers'
-puts testing_array.my_count(&:even?)
-
-puts 'Testing my_map by printing a new array which multiplies every element by 3'
-extra_array = testing_array.my_map { |value| value * 3 }
-print extra_array
-puts ''
-
-puts 'Testing my_inject by summing all the elements, not using any block'
-puts testing_array.my_inject
-
-puts 'Testing my_inject by summing all the even elements'
-puts testing_array.my_inject(&:even?)
-
-puts 'Testing multiply_els without any block'
-puts testing_array.multiply_els
-
-puts 'Testing multiply_els by multiplying only the even numbers'
-puts testing_array.multiply_els(&:even?)
-
-double = proc { |value| value * 2 }
-
-puts 'Testing my_map with a proc the proc doubles the value'
-extra_array = testing_array.my_map(&double)
-print extra_array
-puts ''
+def multiply_els(array)
+  array.my_inject(:*)
+end
