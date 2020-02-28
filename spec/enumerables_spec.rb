@@ -119,4 +119,29 @@ RSpec.describe Enumerable do
       expect(output).to eql([2, 4, 10, 16, 14, 196, 8])
     end
   end
+
+  describe '#my_inject' do
+    it 'Gets an initial number and a symbol and operates the array' do
+      array = [1, 2, 5, 8, 7, 98, 4]
+
+      expect(array.inject(5, :+)).to eql(130)
+    end
+
+    it 'Gets a symbol and uses it to operate' do
+      array = [1, 2, 5, 8, 7, 98, 4]
+
+      expect(array.inject(:+)).to eql(125)
+    end
+    it 'Gets an initial number and operates with the block instructions' do
+      array = [1, 2, 5, 8, 7, 98, 4]
+
+      expect(array.inject(5) { |acumulator, value| acumulator + value }).to eql(130)
+    end
+
+    it 'Gets a symbol and uses it to operate' do
+      array = [1, 2, 5, 8, 7, 98, 4]
+
+      expect(array.inject { |accumulator, value| accumulator + value }).to eql(125)
+    end
+  end
 end
