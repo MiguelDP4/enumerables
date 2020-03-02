@@ -185,35 +185,35 @@ RSpec.describe Enumerable do
 
   describe '#my_inject' do
     it 'Gets an initial number and a symbol and operates the array' do
-      expect(array.inject(5, :+)).to eql(130)
+      expect(array.my_inject(5, :+)).to eql(130)
     end
 
     it 'Gets an initial number and a symbol and operates the array (negative)' do
-      expect(array.inject(5, :+)).not_to eql(10)
+      expect(array.my_inject(5, :+)).not_to eql(10)
     end
 
     it 'Gets a symbol and uses it to operate' do
-      expect(array.inject(:+)).to eql(125)
+      expect(array.my_inject(:+)).to eql(125)
     end
 
     it 'Gets a symbol and uses it to operate (negative)' do
-      expect(array.inject(:+)).not_to eql(200)
+      expect(array.my_inject(:+)).not_to eql(200)
     end
 
     it 'Gets an initial number and operates with the block instructions' do
-      expect(array.inject(5) { |acumulator, value| acumulator + value }).to eql(130)
+      expect(array.my_inject(5) { |acumulator, value| acumulator + value }).to eql(130)
     end
 
     it 'Gets an initial number and operates with the block instructions (negative)' do
-      expect(array.inject(5) { |acumulator, value| acumulator + value }).not_to eql(150)
+      expect(array.my_inject(5) { |acumulator, value| acumulator + value }).not_to eql(150)
     end
 
     it 'Gets a symbol and uses it to operate' do
-      expect(array.inject { |accumulator, value| accumulator + value }).to eql(125)
+      expect(array.my_inject { |accumulator, value| accumulator + value }).to eql(125)
     end
 
     it 'Gets a symbol and uses it to operate (negative)' do
-      expect(array.inject { |accumulator, value| accumulator + value }).not_to eql(200)
+      expect(array.my_inject { |accumulator, value| accumulator + value }).not_to eql(200)
     end
   end
 end
